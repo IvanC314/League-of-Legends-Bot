@@ -1,5 +1,6 @@
 ﻿using Leaf.xNet;
 using LeagueBot.Game.Enums;
+using LeagueBot.IO;
 using LeagueBot.Patterns;
 using LeagueBot.Utils;
 using Newtonsoft.Json;
@@ -16,9 +17,7 @@ namespace LeagueBot.ApiHelpers
 {
     public class GameLCU
     {
-        private static int ApiPort = 2999;
-
-        public static string ApiUrl = "https://127.0.0.1:" + ApiPort + "/liveclientdata";
+        public static string ApiUrl = "https://127.0.0.1:" + Constants.GameApiPort + "/liveclientdata";
 
         public static string ActivePlayerUrl = ApiUrl + "/activeplayer";
 
@@ -28,22 +27,30 @@ namespace LeagueBot.ApiHelpers
 
         public static bool IsApiReady()
         {
-            using (HttpRequest request = new HttpRequest())
+            try
             {
-                request.CharacterSet = Encoding.UTF8;
-                request.IgnoreProtocolErrors = true;
-                request.ConnectTimeout = 5000;
-                request.ReadWriteTimeout = 5000;
-
-                var response = request.Get(ApiUrl + "/playerlist");
-
-                if (response.StatusCode == HttpStatusCode.OK)
+                using (HttpRequest request = new HttpRequest())
                 {
-                    return true;
-                }
-            }
+                    request.CharacterSet = Constants.HttpRequestEncoding;
+                    request.IgnoreProtocolErrors = true;
+                    request.ConnectTimeout = Constants.HttpRequestTimeout;
+                    request.ReadWriteTimeout = Constants.HttpRequestTimeout;
 
-            return false;
+                    var response = request.Get(PlayerListUrl);
+
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch
+            {
+                Logger.Write("Unable to communicate with LCU Api...", MessageState.WARNING);
+                return false;
+            }
         }
 
         public static bool IsPlayerDead()
@@ -131,7 +138,7 @@ namespace LeagueBot.ApiHelpers
         /// <returns></returns>
         private static int GetPort()
         {
-            var processes = Process.GetProcessesByName(PatternScript.CLIENT_PROCESS_NAME);
+            var processes = Process.GetProcessesByName(Constants.ClientProcessName);
 
             using (var ns = new Process())
             {
@@ -166,9 +173,9 @@ namespace LeagueBot.ApiHelpers
             using (HttpRequest request = new HttpRequest())
             {
                 request.IgnoreProtocolErrors = true;
-                request.CharacterSet = Encoding.UTF8;
-                request.ConnectTimeout = 5000;
-                request.ReadWriteTimeout = 5000;
+                request.CharacterSet = Constants.HttpRequestEncoding;
+                request.ConnectTimeout = Constants.HttpRequestTimeout;
+                request.ReadWriteTimeout = Constants.HttpRequestTimeout;
                 return request.Get(url).ToString();
             }
         }

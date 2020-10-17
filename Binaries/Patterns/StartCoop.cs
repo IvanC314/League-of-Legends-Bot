@@ -12,22 +12,31 @@ namespace LeagueBot
     {
         private static ChampionEnum[] Champions = new ChampionEnum[]
         {
-            ChampionEnum.Annie,
             ChampionEnum.Veigar,
+            ChampionEnum.Annie,
             ChampionEnum.Amumu,
         };
 
         private static QueueEnum QueueType = QueueEnum.BotIntro;
 
+        
         public override void Execute()
         {
+            client.openClient();
+
             bot.log("Waiting for league client process...");
 
-            bot.waitProcessOpen(CLIENT_PROCESS_NAME);
-            
-            bot.initialize();
+            bot.waitProcessOpen(Constants.ClientProcessName);
 
-            bot.centerProcess(CLIENT_PROCESS_NAME);
+            bot.bringProcessToFront(Constants.ClientProcessName);
+            
+            bot.centerProcess(Constants.ClientProcessName);   
+
+            client.initialize(); // read current league process informations
+
+            bot.log("Waiting for league client to be ready...");
+
+            client.waitClientReady(); 
 
             while (!client.loadSummoner())
             {
@@ -37,34 +46,47 @@ namespace LeagueBot
 
             bot.log("Summoner loaded "+ client.summoner.displayName);
 
+            bot.wait(3000);
+
             client.createLobby(QueueType);
 
+           
+
+            ProcessMatch();
+        
+
+        }
+        private void ProcessMatch()
+        {
             bot.log("Searching match...");
             
+            bot.wait(3000);
+
             SearchMatchResult result = client.searchMatch();
 
             while (result != SearchMatchResult.Ok)
-            {
+            {   
                 switch (result)
                 {
                     case SearchMatchResult.GatekeeperRestricted:
-                       bot.warn("Cannot search match. Queue dodge timer. Retrying in 10 seconds.");
+                       bot.warn("Cannot search match. Queue dodge timer. Retrying in 20 seconds.");
+                       bot.wait(1000 * 20);
                        break;
                     case SearchMatchResult.QueueNotEnabled:
                        client.createLobby(QueueType);
                        bot.warn("Cannot search match. Creating lobby...");
+                       bot.wait(1000 * 10);
                        break;
                     case SearchMatchResult.InvalidLobby:
                        bot.warn("Cannot search match. Client not ready. Retrying in 10 seconds.");
+                        bot.wait(1000 * 10);
                        break;
                 }
 
-                bot.wait(1000 * 10);
+               
 
                 result = client.searchMatch();
             }
-
-            
 
             bool isMatchFound = false;
 
@@ -84,7 +106,7 @@ namespace LeagueBot
 
             bot.log("Match founded.");
 
-            bot.wait(4000);
+            bot.wait(5000);
 
             bool picked = false;
 
@@ -118,11 +140,25 @@ namespace LeagueBot
                 championIndex++;
 
                 bot.wait(1000);
+            }
 
+            bot.log("Waiting....");
+
+            GameflowPhaseEnum currentPhase = client.getGameflowPhase();
+
+            while (currentPhase != GameflowPhaseEnum.InProgress)
+            {
+                if (currentPhase != GameflowPhaseEnum.ChampSelect)
+                {
+                    bot.log("Game was dodged, finding match....");
+                    ProcessMatch();
+                    return;
+                }
+                bot.wait(1000);
+                currentPhase = client.getGameflowPhase();
             }
 
             bot.executePattern("Coop");
-            
         }
     }
 }

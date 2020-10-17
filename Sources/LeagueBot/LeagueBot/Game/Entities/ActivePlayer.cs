@@ -1,6 +1,5 @@
 ﻿using LeagueBot.Api;
 using LeagueBot.ApiHelpers;
-using LeagueBot.Image;
 using LeagueBot.IO;
 using System;
 using System.Collections.Generic;
@@ -30,11 +29,11 @@ namespace LeagueBot.Game.Entities
 
             Color color2 = Color.FromArgb(208, 94, 94); // minion lifebar
 
-            var target = ImageHelper.GetColorPosition(color);
+            var target = ScreenHelper.GetColorPosition(color);
 
             if (target == null)
             {
-                var minion = ImageHelper.GetColorPosition(color2);
+                var minion = ScreenHelper.GetColorPosition(color2);
 
                 if (minion == null)
                 {
@@ -72,7 +71,7 @@ namespace LeagueBot.Game.Entities
             BotHelper.InputIdle();
         }
 
-        public void upgradeSpell(int indice)
+        public void upgradeSpell(int indice) // <---- replace this by keybinding + league settings
         {
             Point coords = new Point();
 

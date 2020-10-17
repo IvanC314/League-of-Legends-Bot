@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using LeagueBot;
 using LeagueBot.Patterns;
 using LeagueBot.Game.Enums;
 using LeagueBot.Game.Misc;
@@ -10,6 +11,7 @@ namespace LeagueBot
 {
     public class Coop : PatternScript
     {
+
         private Point CastTargetPoint
         {
             get;
@@ -36,27 +38,35 @@ namespace LeagueBot
             new Item("Rabadon's Deathcap",1100), 
         };
 
+        public override bool ThrowException 
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public override void Execute()
         {
             bot.log("Waiting for league of legends process...");
 
-            bot.waitProcessOpen(GAME_PROCESS_NAME); // 120 seconds timeout
+            bot.waitProcessOpen(Constants.GameProcessName); 
 
-            bot.waitUntilProcessBounds(GAME_PROCESS_NAME, 1030, 797);
+            bot.waitUntilProcessBounds(Constants.GameProcessName, 1030, 797);
 
             bot.wait(200);
 
             bot.log("Waiting for game to load.");
 
-            bot.bringProcessToFront(GAME_PROCESS_NAME);
-            bot.centerProcess(GAME_PROCESS_NAME);
+            bot.bringProcessToFront(Constants.GameProcessName);
+            bot.centerProcess(Constants.GameProcessName);
 
             game.waitUntilGameStart();
 
             bot.log("Game Started");
 
-            bot.bringProcessToFront(GAME_PROCESS_NAME);
-            bot.centerProcess(GAME_PROCESS_NAME);
+            bot.bringProcessToFront(Constants.GameProcessName);
+            bot.centerProcess(Constants.GameProcessName);
 
             bot.wait(3000);
 
@@ -73,21 +83,13 @@ namespace LeagueBot
 
             game.player.upgradeSpellOnLevelUp();
 
-            BuyItems();
+            OnSpawnJoin();
 
-            try
-            {
-                GameLoop();
-            }
-            catch
-            {
-                bot.warn("GameLoop was breaked, ending game.");
-                End();
-            }
-            finally
-            {
-                End();
-            }
+            bot.log("Playing...");
+
+            GameLoop();
+
+            this.End();
         }
         private void BuyItems()
         {
@@ -118,22 +120,17 @@ namespace LeagueBot
         }
         private void GameLoop()
         {
-            AllyIndex = game.getAllyIdToFollow();
-            game.camera.lockAlly(AllyIndex);
-
-            bot.log("Following ally no " + AllyIndex);
-
             int level = game.player.getLevel();
 
             bool dead = false;
 
             bool isRecalling = false;
 
-            while (bot.isProcessOpen(GAME_PROCESS_NAME))
+            while (bot.isProcessOpen(Constants.GameProcessName))
             {
-                bot.bringProcessToFront(GAME_PROCESS_NAME);
+                bot.bringProcessToFront(Constants.GameProcessName);
 
-                bot.centerProcess(GAME_PROCESS_NAME);
+                bot.centerProcess(Constants.GameProcessName);
 
                 int newLevel = game.player.getLevel();
 
@@ -205,8 +202,6 @@ namespace LeagueBot
         {
             AllyIndex = game.getAllyIdToFollow();
             game.camera.lockAlly(AllyIndex);
-
-            bot.log("Following ally no " + AllyIndex);
         }
 
         private void CastAndMove() // Replace this by Champion pattern script.

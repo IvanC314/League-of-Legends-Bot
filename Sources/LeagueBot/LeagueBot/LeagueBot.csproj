@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ApiHelpers\BotHelper.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Game\Enums\ChampionEnum.cs" />
     <Compile Include="Game\Enums\ChampionPickResult.cs" />
     <Compile Include="Game\Enums\GameflowPhaseEnum.cs" />
@@ -65,26 +66,24 @@
     <Compile Include="Game\Misc\Chat.cs" />
     <Compile Include="Game\Misc\Item.cs" />
     <Compile Include="Game\Misc\Shop.cs" />
-    <Compile Include="Game\Settings\LeagueManager.cs" />
+    <Compile Include="Game\Settings\LeagueSettingsManager.cs" />
     <Compile Include="LCU\Protocol\Summoner.cs" />
     <Compile Include="Patterns\PatternScript.cs" />
-    <Compile Include="Images\ImageUtils.cs" />
-    <Compile Include="Images\PixelCache.cs" />
-    <Compile Include="Images\ImageValues.cs" />
     <Compile Include="IO\Json.cs" />
     <Compile Include="IO\CFGFile.cs" />
     <Compile Include="IO\Logger.cs" />
     <Compile Include="Api\GameApi.cs" />
     <Compile Include="Patterns\PatternsManager.cs" />
-    <Compile Include="Images\ImageRecognition.cs" />
     <Compile Include="Utils\DirectBitmap.cs" />
     <Compile Include="Utils\FastBitmap.cs" />
+    <Compile Include="Utils\LogFile.cs" />
     <Compile Include="Windows\ApplicationCapture.cs" />
     <Compile Include="Windows\Interop.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windows\InterceptKeys.cs" />
     <Compile Include="Windows\KeyboardMapper.cs" />
+    <Compile Include="Windows\ProcessExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -27,6 +27,29 @@ namespace LeagueBot.Api
             get;
             private set;
         }
+        public void initialize()
+        {
+            ClientLCU.Initialize();
+        }
+        public void waitClientReady()
+        {
+            while (true)
+            {
+                if (ClientLCU.IsApiReady())
+                {
+                    break;
+                }
+                Thread.Sleep(2000);
+            }
+        }
+        public void closeClient()
+        {
+            ClientLCU.CloseClient();
+        }
+        public void openClient()
+        {
+            ClientLCU.OpenClient();
+        }
         public bool loadSummoner()
         {
             this.summoner = ClientLCU.GetCurrentSummoner();
@@ -46,7 +69,7 @@ namespace LeagueBot.Api
         }
         public bool isMatchFound()
         {
-            return ClientLCU.IsMatchFounded();
+            return ClientLCU.IsMatchFound();
         }
         public GameflowPhaseEnum getGameflowPhase()
         {

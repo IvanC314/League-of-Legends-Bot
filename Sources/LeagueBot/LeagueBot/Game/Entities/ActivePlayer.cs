@@ -71,9 +71,7 @@ namespace LeagueBot.Game.Entities
             BotHelper.InputIdle();
         }
 
-<<<<<<< Updated upstream
-        public void upgradeSpell(int indice) // <---- replace this by keybinding + league settings
-=======
+        //public void upgradeSpell(int indice) // <---- replace this by keybinding + league settings
         public void FakerSpellCast(int indice)
         {
             IEntity target = getNearTarget();
@@ -111,7 +109,6 @@ namespace LeagueBot.Game.Entities
         }
 
         public void upgradeSpell(int indice)
->>>>>>> Stashed changes
         {
             Point coords = new Point();
 

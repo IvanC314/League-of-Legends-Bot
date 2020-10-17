@@ -41,11 +41,7 @@ namespace LeagueBot
             new Item("void staff", 1365)
         };
 
-<<<<<<< Updated upstream
-        public override bool ThrowException 
-=======
         public override bool ThrowException
->>>>>>> Stashed changes
         {
             get
             {
@@ -57,39 +53,30 @@ namespace LeagueBot
         {
             bot.log("Waiting for league of legends process...");
 
-<<<<<<< Updated upstream
             bot.waitProcessOpen(Constants.GameProcessName); 
 
             bot.waitUntilProcessBounds(Constants.GameProcessName, 1030, 797);
-=======
-            bot.waitProcessOpen(GameProcessName); // 120 seconds timeout
+            bot.waitProcessOpen(Constants.GameProcessName); // 120 seconds timeout
 
-            bot.waitUntilProcessBounds(GameProcessName, 1030, 797);
->>>>>>> Stashed changes
+            bot.waitUntilProcessBounds(Constants.GameProcessName, 1030, 797);
 
             bot.wait(200);
 
             bot.log("Waiting for game to load.");
 
-<<<<<<< Updated upstream
+            //bot.bringProcessToFront(Constants.GameProcessName);
+            //bot.centerProcess(Constants.GameProcessName);   - same thing as below
             bot.bringProcessToFront(Constants.GameProcessName);
             bot.centerProcess(Constants.GameProcessName);
-=======
-            bot.bringProcessToFront(GameProcessName);
-            bot.centerProcess(GameProcessName);
->>>>>>> Stashed changes
 
             game.waitUntilGameStart();
 
             bot.log("Game Started");
 
-<<<<<<< Updated upstream
+            //bot.bringProcessToFront(Constants.GameProcessName);
+            //bot.centerProcess(Constants.GameProcessName);
             bot.bringProcessToFront(Constants.GameProcessName);
             bot.centerProcess(Constants.GameProcessName);
-=======
-            bot.bringProcessToFront(GameProcessName);
-            bot.centerProcess(GameProcessName);
->>>>>>> Stashed changes
 
             bot.wait(3000);
 
@@ -108,11 +95,8 @@ namespace LeagueBot
 
             OnSpawnJoin();
 
-<<<<<<< Updated upstream
             bot.log("Playing...");
 
-=======
->>>>>>> Stashed changes
             GameLoop();
 
             this.End();
@@ -146,94 +130,89 @@ namespace LeagueBot
         }
         private void GameLoop()
         {
-<<<<<<< Updated upstream
-=======
             game.camera.lockAlly(1);
 
             bot.log("Following me");
 
->>>>>>> Stashed changes
             int level = game.player.getLevel();
 
             bool dead = false;
 
             bool isRecalling = false;
 
-<<<<<<< Updated upstream
             while (bot.isProcessOpen(Constants.GameProcessName))
             {
                 bot.bringProcessToFront(Constants.GameProcessName);
 
                 bot.centerProcess(Constants.GameProcessName);
-=======
-            while (bot.isProcessOpen(GameProcessName))
-            {
-                bot.bringProcessToFront(GameProcessName);
-
-                bot.centerProcess(GameProcessName);
->>>>>>> Stashed changes
-
-                int newLevel = game.player.getLevel();
-
-                if (newLevel != level)
+                while (bot.isProcessOpen(Constants.GameProcessName))
                 {
-                    level = newLevel;
-                    game.player.upgradeSpellOnLevelUp();
-                }
+                    bot.bringProcessToFront(Constants.GameProcessName);
 
+                    bot.centerProcess(Constants.GameProcessName);
 
-                if (game.player.dead())
-                {
-                    if (!dead)
+                    int newLevel = game.player.getLevel();
+
+                    if (newLevel != level)
                     {
-                        dead = true;
-                        isRecalling = false;
-                        OnDie();
+                        level = newLevel;
+                        game.player.upgradeSpellOnLevelUp();
                     }
 
-                    bot.wait(4000);
-                    continue;
-                }
 
-                if (dead)
-                {
-                    dead = false;
-                    OnRevive();
-                    continue;
-                }
-
-                if (isRecalling)
-                {
-                    game.player.recall();
-                    bot.wait(4000);
-
-                    if ((game.player.getManaPercent() == 1) & (game.player.getHealthPercent() == 1))
+                    if (game.player.dead())
                     {
-                        OnSpawnJoin();
-                        isRecalling = false;
+                        if (!dead)
+                        {
+                            dead = true;
+                            isRecalling = false;
+                            OnDie();
+                        }
+
+                        bot.wait(4000);
+                        continue;
                     }
-                    continue;
+
+                    if (dead)
+                    {
+                        dead = false;
+                        OnRevive();
+                        continue;
+                    }
+
+                    if (isRecalling)
+                    {
+                        game.player.recall();
+                        bot.wait(4000);
+
+                        if ((game.player.getManaPercent() == 1) & (game.player.getHealthPercent() == 1))
+                        {
+                            OnSpawnJoin();
+                            isRecalling = false;
+                        }
+                        continue;
+                    }
+
+
+
+                    if (game.player.getManaPercent() <= 0.10d)
+                    {
+                        isRecalling = true;
+                        continue;
+                    }
+
+                    if (game.player.getHealthPercent() <= 0.3d)
+                    {
+                        game.player.FlashDown(6);
+                        isRecalling = true;
+                        continue;
+                    }
+
+
+                    CastAndMove();
+
+
                 }
-
-
-
-                if (game.player.getManaPercent() <= 0.10d)
-                {
-                    isRecalling = true;
-                    continue;
-                }
-
-                if (game.player.getHealthPercent() <= 0.3d)
-                {
-                    game.player.FlashDown(6);
-                    isRecalling = true;
-                    continue;
-                }
-
-
-                CastAndMove();
-
-
             }
         }
         private void OnDie()
@@ -247,14 +226,11 @@ namespace LeagueBot
         }
         private void OnRevive()
         {
-<<<<<<< Updated upstream
-            AllyIndex = game.getAllyIdToFollow();
-            game.camera.lockAlly(AllyIndex);
-=======
+            //AllyIndex = game.getAllyIdToFollow();
+            //game.camera.lockAlly(AllyIndex);
             game.camera.lockAlly(1);
 
             bot.log("i die");
->>>>>>> Stashed changes
         }
 
         private void CastAndMove() // Replace this by Champion pattern script.

@@ -71,7 +71,47 @@ namespace LeagueBot.Game.Entities
             BotHelper.InputIdle();
         }
 
+<<<<<<< Updated upstream
         public void upgradeSpell(int indice) // <---- replace this by keybinding + league settings
+=======
+        public void FakerSpellCast(int indice)
+        {
+            IEntity target = getNearTarget();
+
+            if (target == null)
+                return;
+
+            if (target is Minion && indice == 3)
+            {
+                return;
+            }
+            if (target is Minion && indice == 4)
+            {
+                return;
+            }
+            string key = "D" + indice;
+            InputHelper.MoveMouse(target.Position.X, target.Position.Y);
+            InputHelper.PressKey(key);
+            BotHelper.Wait(35);
+        }
+
+        public void FlashUp(int indice)
+        {
+            string key = "D" + indice;
+            InputHelper.MoveMouse(1125, 350);
+            InputHelper.PressKey(key);
+            BotHelper.Wait(50);
+        }
+        public void FlashDown(int indice)
+        {
+            string key = "D" + indice;
+            InputHelper.MoveMouse(600, 650);
+            InputHelper.PressKey(key);
+            BotHelper.Wait(50);
+        }
+
+        public void upgradeSpell(int indice)
+>>>>>>> Stashed changes
         {
             Point coords = new Point();
 

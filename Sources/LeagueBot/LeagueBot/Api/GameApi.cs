@@ -68,7 +68,7 @@ namespace LeagueBot.Api
             this.player = new ActivePlayer(this);
         }
 
-       
+
         public void waitUntilGameStart()
         {
             while (true)
@@ -82,7 +82,7 @@ namespace LeagueBot.Api
             }
 
         }
-     
+
         public dynamic getAllies()
         {
             return GameLCU.GetAllies();
@@ -136,6 +136,26 @@ namespace LeagueBot.Api
         public void moveCenterScreen()
         {
             InputHelper.RightClick(886, 521);
+            BotHelper.InputIdle();
+        }
+        public void moveUpRightScreen()
+        {
+            InputHelper.RightClick(1125, 350);
+            BotHelper.InputIdle();
+        }
+        public void moveDownLeftScreen()
+        {
+            InputHelper.RightClick(600, 650);
+            BotHelper.InputIdle();
+        }
+        public void moveUpNexus()
+        {
+            InputHelper.RightClick(1500, 600);
+            BotHelper.InputIdle();
+        }
+        public void moveDownNexus()
+        {
+            InputHelper.RightClick(1125, 350);
             BotHelper.InputIdle();
         }
     }
